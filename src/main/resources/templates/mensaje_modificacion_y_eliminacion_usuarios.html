@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body class="m-7" onload="setTimeout(() => location.href='http://localhost:8080/admin/listar', 3000);"> <!--abrir la pagina en otra pestaña onclick="setTimeout(() => window.open('http://localhost:8080/credenciales/buscar/1/LU8HAF/screenshot-tomada-tarjeta', '_blank'), 1500);"-->
+        <header th:replace="/fragments/header :: header"></header>
+
+        <main>
+            <div th:replace="/fragments/mensajes :: div"></div>
+        </main>
+            
+        <footer th:replace= "/fragments/footer :: div"></footer>
+    </body>
+</html>

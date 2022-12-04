@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body class="m-7">
+        <header th:replace="/fragments/header :: header"></header>
+        
+        
+        
+        
+
+        <div class="row m-3">
+            <div class="col-md-12">
+                <div class="card flex-md-row mb-4 box-shadow h-md-250" >
+                    <div class="card-body align-items-start">
+                        
+                        <div class="mb-1 text-muted" th:text="${actividad.fecha}"></div>
+                        
+                        <h3><strong class="d-line-block mb-2 text-success" th:text="${actividad.titulo}"></strong></h3>
+
+
+                        <p class="card-text texto-detail-cuerpo" th:text="${actividad.cuerpo}"></p>
+
+                        <ul class="list-group mt-1">                           
+                            <a th:href="@{'/docs/'+${actividad.bases}}" target="_blank" class="btn btn-outline-success m-2 botones-detail">Ver bases</a>                            
+
+                            <a th:href="@{/credenciales/tarjetasYCertificados/}+${actividad.id}" class="btn btn-outline-success m-2 botones-detail">Ver certificado y tarjeta</a>                            
+                        </ul>
+                        
+                        <a data-bs-toggle1="mensaje" title="Modificar" class="btn btn-outline-warning m-2 botones-detail-eliminar-modificar" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/modificar/}+${actividad.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                            </svg>
+                        </a>
+                        
+                        <a type="button" class="btn btn-outline-danger botones-detail-eliminar-modificar botones-detail-eliminar" sec:authorize="hasRole('ADMIN')" data-bs-toggle="modal" data-bs-toggle1="mensaje" title="Eliminar" th:attr="data-bs-target='#exampleModal'+*{actividad.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                            </svg>
+                        </a>
+
+                        <section class="text-center container">
+
+                            <div class="row mt-3">
+                                <div class="divVolver">
+                                    <a th:href="@{/}" class="btn btn-secondary my-2 botonVolver botones">Volver</a>
+                                </div>
+                            </div>                            
+                        </section>
+                        
+                        
+                        
+                        
+                        <div class="modal fade" th:id="*{'exampleModal'+{actividad.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class= "modal-header">
+                                        <h5 class= "modal-title" id="exampleModalLongTitle" >Confirm Delete</h5>
+                                        <div class="d-flex justify-content-end">
+                                            <button type="button" class="btn-close btn-xl" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                     Está seguro que desea borrar la actividad?
+                                      <input type= "hidden" id="userIdHiddenInput" name= "userIdHiddenInput"/>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a type= "button" class= "btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</a>
+                                      <a type= "button" class= "btn btn-danger" th:href="@{/admin/eliminar/}+${actividad.id}">Borrar posteo</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                       
+                    </div>
+                    <img
+                        class="h-100 d-inline-block rounded card-img-right flex-auto d-md-block m-4"  
+                        height="225"
+                        width="50%"
+                        th:src="@{'data:image/jpeg;base64,'+${actividad.imagen}}"
+                        alt="imagen"
+                        />
+
+                </div>
+            </div>
+        </div>
+        
+        <footer th:replace= "/fragments/footer :: div"></footer>
+    </body>
+</html>

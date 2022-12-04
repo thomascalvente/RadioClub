@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body class="m-7">
+        <header th:replace="/fragments/header :: header"></header>
+
+
+
+        <div class="form-control container m-5 contenedor">
+            <form class="formulario m-3 was-validated" enctype="multipart/form-data"
+                  th:action="@{/admin/guardado}" method="POST">
+
+                <input type="hidden" name="id" th:value="${actividad.id}">
+                
+
+                <div th:replace="/fragments/mensajes :: div"></div>
+
+                <div class="form-group my-3 text-center">
+                    <h3 class="card-title">Cargar archivo</h3>
+                </div>
+                <div class="field mb-3">
+                    <label for="txt" class="form-label">Archivo ADIF</label>
+                    <input type="file" class="form-control" aria-label="file example" required id="txt" name="file">
+                    <div class="invalid-feedback">Es necesario cargar un archivo</div>
+                </div>
+
+
+                <button type="submit" class="btn btn-primary mt-3 botones">Guardar</button>
+                <a class="btn btn-secondary mt-3 botones" th:href="@{/admin/credenciales/}+${actividad.id}">Volver</a>
+
+            </form>
+        </div>
+
+
+
+        <footer th:replace= "/fragments/footer :: div"></footer>
+    </body>
+</html>

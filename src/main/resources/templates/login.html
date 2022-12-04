@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body>
+        <header th:replace="/fragments/header :: header"></header>
+
+        <div th:replace="/fragments/mensajes :: div"></div>
+        <div class="login mauto contenedor ">
+
+            
+
+            <form class="formulario" th:action="@{/logincheck}" method="POST">
+
+                <div class="form-group my-3">
+                    <h3 class="card-title text-light">Acceder</h3>
+                </div>
+                <div class="form-group my-3">
+                    <input type="email" class="form-control" name="email" autofocus="autofocus" placeholder="EMAIL">
+                </div>
+                <div class="form-group my-3 password-container">
+                    <input id="password" type="password" class="form-control" name="password" autofocus="autofocus" placeholder="CONTRASEÑA">
+                    <i class="fa-solid fa-eye text-dark" id="eye"></i>               
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3 botones">Ingresar</button>
+            </form>
+
+            <section class="text-center container">
+
+                <div class="row mt-3">
+                    <div class="divVolver">
+                        <a th:href="@{/}" class="btn btn-secondary my-2 botonVolver botones">Volver</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <footer th:replace= "/fragments/footer :: div" ></footer>
+    </body>
+</html>

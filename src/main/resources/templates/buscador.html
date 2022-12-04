@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body class="m-7">
+        <header th:replace="/fragments/header :: header"></header>
+
+        <main class="container m-5 contenedor">
+            
+            <div class="container" sec:authorize="hasRole('ADMIN')">
+                <a class="btn btn-success" th:href="@{/admin/credenciales/}+${actividad.id}">Ver todos los datos</a>
+            </div>
+            
+            <div class="m-buscador">
+                <div class="container altura-buscador-licencias">
+                    <div class=" flex-wrap align-items-center justify-content-center altura-buscador-licencias-llenar">
+                        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 container m-0 text-center altura-buscador-licencias-llenar" role="search" th:action="@{/credenciales/buscar/}+${actividad.id}" method="POST">
+                            <div class="input-group mb-3 altura-buscador-licencias-llenar">
+                                <span class="input-group-text lupa-buscador-licencias" id="basic-addon1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-search widht100" viewBox="0 0 16 16">
+                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                    </svg>
+                                </span>
+                                <input type="search" class="input-buscador-licencias form-control form-control-dark text-bg-dark " placeholder="Introduzca su licencia" aria-label="Search" name="licencia" th:value="*{licencia}">
+                            </div>                       
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+             <div class="container text-end">
+                <a class="btn btn-secondary" th:href="@{/actividades/detalle/}+${actividad.id}">Volver</a>
+            </div>
+            
+        </main>
+
+        <footer th:replace= "/fragments/footer :: div"></footer>
+    </body>
+</html>

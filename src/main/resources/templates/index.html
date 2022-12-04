@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body>
+        <header th:replace="/fragments/header :: header"></header>
+
+        <main>
+
+            <div id="spinner" class="hidden animated">
+                <div th:replace="/fragments/mensajes :: div"></div>
+
+                <img class="banner" src="/img/banner-3.jpg">
+
+                <div th:replace= "/fragments/separadores :: div"></div>
+
+
+                <div th:replace= "/fragments/card :: div"></div>
+            </div>
+
+            <div class="loader" id="loaderSpinner"></div>
+
+        </main>
+
+        <footer th:replace= "/fragments/footer :: div"></footer>
+    </body>
+</html>

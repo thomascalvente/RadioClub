@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body class="m-7">
+        <header th:replace="/fragments/header :: header"></header>
+
+        <main>
+
+            <div onload="setTimeout(() => window.open('http://localhost:8080/admin/listar'), 1500);" th:replace="/fragments/mensajes :: div"></div>
+
+            <div class="p-3 mb-3">
+                <div class="container">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center">
+                        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 container m-0 text-center" role="search" th:action="@{/admin/buscarUsuarios}" method="POST">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                    </svg>
+                                </span>
+                                <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Buscar..." aria-label="Search" name="frase" th:value="*{frase}">
+                            </div>                       
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="text-center">
+
+
+                <table class="table table-success table-hover m-auto widht75">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Email</th>  
+                            <th scope="col">Licencia</th>
+                            <th scope="col">Rol</th>
+                            <th scope="col" colspan="2">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr th:each="usuario : ${usuarios}">
+                            <td th:text="${usuario.nombre}"></td>
+                            <td th:text="${usuario.email}"></td>
+                            <td th:text="${usuario.licencia}"></td>
+                            <td th:text="${usuario.rol}"></td>
+                            <td><a type="button" class="btn btn-success" data-bs-toggle="modal" th:attr="data-bs-target='#exampleModal'+*{usuario.id}">Modificar</a></td>
+                            <td><a type="button" class="btn btn-danger" data-bs-toggle="modal" th:attr="data-bs-target='#exampleModal2'+*{usuario.id}">Borrar</a></td>
+
+
+                    <div class="modal fade" th:id="*{'exampleModal'+{usuario.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog  modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class= "modal-header">
+                                    <h5 class= "modal-title" id="exampleModalLongTitle" >Confirm Update</h5>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn-close btn-xl" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    Elija el rol que desee asignar
+                                    <input type= "hidden" id="userIdHiddenInput" name= "userIdHiddenInput"/>
+                                </div>
+                                <div class="modal-footer">
+                                    <a type= "button" class= "btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cerrar</a>
+                                    <a type= "button" class= "btn btn-primary" th:href="@{/admin/modificarRolUsuario/{id}/{ADMIN}(id = ${usuario.id}, ADMIN = ${usuario.rol.ADMIN})}">Rol ADMIN</a>
+                                    <a type= "button" class= "btn btn-primary" th:href="@{/admin/modificarRolUsuario/{id}/{USER}(id = ${usuario.id}, USER = ${usuario.rol.USER})}">Rol USER</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal fade" th:id="*{'exampleModal2'+{usuario.id}}" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                        <div class="modal-dialog  modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class= "modal-header">
+                                    <h5 class= "modal-title" id="exampleModalLongTitle" >Confirm Delete</h5>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn-close btn-xl" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                                <div class="modal-body modal-listar-usuarios">
+                                    Está seguro que desea eliminar a <strong class="modal-usuario" th:text="${usuario.nombre}"></strong>?
+                                    <input type= "hidden" id="userIdHiddenInput" name= "userIdHiddenInput"/>
+                                </div>
+                                <div class="modal-footer">
+                                    <a type= "button" class= "btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</a>
+                                    <a type= "button" class= "btn btn-danger" th:href="@{/admin/eliminarUsuario/}+${usuario.id}">Borrar usuario</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </tr>
+                    </tbody>
+                </table>
+                
+                <div th:if="${buscarUsuarios != true}" class="row margin-pagination">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <nav aria-label="Pagination">
+                            <ul class="pagination justify-content-center">
+                                <li th:if="${prev != 0}" class="page-item" th:classappend="${prev == 0 ? 'disabled' : ''}">
+                                    <a class="page-link" th:href="@{|/admin/listar/?page=${prev}|}">Anterior</a>
+                                </li>
+                                <li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : ''}">
+                                    <a class="page-link" th:href="@{|/admin/listar/?page=${page}|}" th:text="${page}"></a>
+                                </li>
+                                <li th:if="${current != last}" class="page-item" th:classappend="${current == last ? 'disabled' : ''}">
+                                    <a class="page-link" th:href="@{|/admin/listar/?page=${next}|}">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+
+        </main>
+        <br>
+        <div class="container text-center">
+            <a class="btn btn-secondary" th:href="@{/}">Volver</a>
+        </div>
+
+
+        <footer th:replace= "/fragments/footer :: div"></footer>
+    </body>
+</html>

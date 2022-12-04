@@ -1,0 +1,69 @@
+<header class="navbar navbar-expand-lg p-3 bg-dark text-white fixed-top">
+    <div class="container">
+
+        <a th:href="@{/}"><img src="/img/icono-sin-fondo.png" class="icono-inicial" width="40"/></a>
+        
+
+        <a class="dropdown-item text-white navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+            </svg>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="lista-navegacion"><a th:href="@{/}" class="nav-link px-2 text-white">Inicio</a></li>
+                <li class="lista-navegacion"><a href=https://www.qrz.com/db/LU5MA target="_blank" rel="noopener noreferrer" class="nav-link px-2 text-white">QRZ</a></li>
+                <li class="lista-navegacion nav-item dropdown">
+                    <div class="dropdown desplegable">
+                        <a href="#" class="nav-link px-2 text-white nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown">¿Quienes somos? </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" th:href="@{/zona}" >Nuestro pueblo</a></li>
+                            <li><a class="dropdown-item" href="#">Institución</a></li>
+                            <li><a class="dropdown-item" href="#">Comisión directiva</a></li>
+                            <li><a class="dropdown-item" href="#">Reseña histórica</a></li>
+                            <li><a class="dropdown-item" th:href="@{/repetidora-147.345}">Repetidora VHF 147.345+600</a></li>
+                            <li><a class="dropdown-item" href="#">Contacto</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="lista-navegacion nav-item dropdown">
+                    <div class="dropdown desplegable">
+                        <a href="#" class="nav-link px-2 text-white nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Info radioaficionado</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#" >¿Que es la radioafición?</a></li>
+                            <li><a class="dropdown-item" href="#">Cursos</a></li>
+                            <li><a class="dropdown-item" href="#">Renovacion de licencia</a></li>
+                            <li><a class="dropdown-item" href="#">Rehabilitación de licencia</a></li>
+                            <li><a class="dropdown-item" th:href="@{/docs/reglamento-de-radioaficionados.pdf}" target="_blank" rel="noopener noreferrer">Reglamentación</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            <div class="text-end">
+                <a class="btn btn-outline-light fw-bolder" th:if="${session.usuariosession == null}" th:href="@{/login}">Ingresar</a>
+                <a class="btn btn-outline-light fw-bolder" th:if="${session.usuariosession == null}" th:href="@{/registrar}">Registrarse</a>
+            </div>
+
+            <div class="m-0" th:if="${session.usuariosession != null}">
+                <a class="btn btn-outline-light fw-bolder" sec:authorize="hasRole('ADMIN')" th:href="@{/admin/publicar}"
+                   >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 18 18">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                    </svg> Publicar
+                </a>
+            </div>
+
+            <div class="dropdown desplegable" th:if="${session.usuariosession != null}">
+                <a class="nav-link px-2 text-white nav-link dropdown-toggle" th:text=" 'Hola '+${session.usuariosession.nombre} " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+
+                <ul class="dropdown-menu">
+                    <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/listar}" class="dropdown-item">Listar usuarios</a></li>
+                    <li><a class="dropdown-item" th:href="@{/logout}">Cerrar sesion</a></li>
+                </ul>
+            </div>
+        </div>  
+    </div>
+</header>

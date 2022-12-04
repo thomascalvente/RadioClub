@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body class="m-7">
+        <header th:replace="/fragments/header :: header"></header>
+        
+        <main>
+
+            <div id="spinner" class="hidden animated">
+                
+                <div class="m-5 contenedor">
+                    <div th:replace="/fragments/mensajes :: div"></div>
+
+                    <div class="container" sec:authorize="hasRole('ADMIN')">
+                        <a class="btn btn-success" th:href="@{/admin/cargar/}+${actividad.id}">Cargar</a>
+                    </div>
+
+                    <div class="container text-end" sec:authorize="hasRole('ADMIN')">
+                        <a class="btn btn-danger" data-bs-toggle="modal" th:attr="data-bs-target='#exampleModal'+*{actividad.id}">Eliminar a todos</a>
+                    </div>
+
+
+                    <div class="modal fade" th:id="*{'exampleModal'+{actividad.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog  modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class= "modal-header">
+                                    <h5 class= "modal-title" id="exampleModalLongTitle" >Confirm Delete</h5>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn-close btn-xl" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                </div>
+                                <div class="modal-body">
+                                    Está seguro que desea borrar a todas las personas cargadas?
+                                    <input type= "hidden" id="userIdHiddenInput" name= "userIdHiddenInput"/>
+                                </div>
+                                <div class="modal-footer">
+                                  <a type= "button" class= "btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancelar</a>
+                                  <a type= "button" class= "btn btn-danger" th:href="@{/admin/eliminarCredenciales/}+${actividad.id}">Borrar a todos</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+
+
+                    <div class="p-3 mb-3">
+                        <div class="container">
+                            <div class="d-flex flex-wrap align-items-center justify-content-center">
+                                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 container m-0 text-center" role="search" th:action="@{/credenciales/buscar/}+${actividad.id}" method="POST">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                            </svg>
+                                        </span>
+                                        <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Introduzca su licencia" aria-label="Search" name="licencia" th:value="*{licencia}">
+                                    </div>                       
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="text-center">
+
+
+                        <table class="table table-success table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Estación</th>
+                                    <th scope="col">Licencia</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">UTC</th>
+                                    <th scope="col">OPERADOR</th>
+                                    <th th:if="${exito != null || bueno != null || bien != null}" scope="col">Tarjeta</th>
+                                    <th th:if="${exito != null}" scope="col">Certificado</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr th:each="credenciales : ${credenciales}">
+                                    <td th:text="${credenciales.estacionLlamante}"></td>
+                                    <td th:text="${credenciales.licencia}"></td>
+                                    <td th:text="${credenciales.date}"></td>
+                                    <td th:text="${credenciales.time}"></td>
+                                    <td th:text="${credenciales.operador}"></td>
+
+                                    <td th:if="${exito != null || bueno != null || bien != null}">
+                                        <a data-bs-toggle1="mensaje" title="Ver tarjeta" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" th:attr="data-bs-target='#exampleModal2'+*{credenciales.id}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                            </svg>
+                                        </a>
+                                    </td>
+
+                                    <td th:if="${exito != null}">    
+                                        <a data-bs-toggle1="mensaje" title="Ver certificado" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" th:attr="data-bs-target='#exampleModal'+*{credenciales.id}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
+                                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+                                            </svg>
+                                        </a>
+                                    </td>
+
+
+                                    <div class="modal fade" th:id="*{'exampleModal'+{credenciales.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog  modal-fullscreen">
+                                            <div class="modal-content">
+                                                <div class="">
+                                                    <div class="mb-3">
+                                                        <div class="d-flex justify-content-end">
+                                                            <button data-bs-toggle1="mensaje" title="Cerrar" type="button" class="btn-close btn-xl fixed margin-top-right" data-bs-dismiss="modal" aria-label="Close">
+                                                            </button>
+                                                        </div> 
+
+                                                        <div class="d-grid gap-2 col-6 mx-auto m-1">
+                                                            <a data-bs-toggle1="mensaje" title="Descargar Certificado" type="button" class="btn btn-success" th:href="@{/credenciales/buscar/{id}/descarga-certificado/{idCredencial}(id = ${actividad.id}, idCredencial = ${credenciales.id})}"> <!--CAMBIAR UNA VEZ SUBIDO AL HOSTING   onclick="setTimeout(() => window.open('http://localhost:8080/credenciales/buscar/1/LU8HAF/screenshot-tomada-certificado', '_blank'), 1500);"  th:href="@{/credenciales/buscar/{id}/{licencia}/screenshot-tomada-certificado(id = ${actividad.id}, licencia = ${credenciales.licencia})}" target="_blank" rel="noreferrer noopener"-->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                                                </svg>
+                                                            </a>
+                                                        </div>
+
+
+                                                        <div class="imagen modal-imagen-certificado">
+                                                            <img th:src="@{'/certificadosAndTarjetas/'+${actividad.certificado}}" class="img-fluid rounded-3" alt="Imagen HTML"> <!--th:src="@{'data:image/jpeg;base64,'+${actividad.certificado}}"-->
+
+                                                            <div th:classappend="${band!=true ? 'licencia-con-nombre' : 'licencia-sin-nombre'}" th:text="${credenciales.licencia}"></div>
+                                                            <div th:if="${band!=true}" class="nombre-licencia-centrada" th:text="${nombre}"></div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" th:id="*{'exampleModal2'+{credenciales.id}}" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                                        <div class="modal-dialog  modal-fullscreen">
+                                            <div class="modal-content">
+                                                <div class="">
+                                                    <div class="mb-3">
+                                                        <div class="d-flex justify-content-end">
+                                                            <button data-bs-toggle1="mensaje" title="Cerrar" type="button" class="btn-close btn-xl fixed margin-top-right" data-bs-dismiss="modal" aria-label="Close">
+                                                            </button>
+                                                        </div> 
+                                                        <div class="d-grid gap-2 col-6 mx-auto m-1">
+                                                            <a data-bs-toggle1="mensaje" title="Descargar Tarjeta" type="button" class="btn btn-success" th:href="@{/credenciales/buscar/{id}/descarga-tarjeta/{idCredencial}(id = ${actividad.id}, idCredencial = ${credenciales.id})}"> <!--CAMBIAR UNA VEZ SUBIDO AL HOSTING  onclick="setTimeout(() => window.open('http://localhost:8080/credenciales/buscar/1/LU8HAF/screenshot-tomada-tarjeta', '_blank'), 1500);"   th:href="@{/credenciales/buscar/{id}/{licencia}/screenshot-tomada-tarjeta(id = ${actividad.id}, licencia = ${credenciales.licencia})}" target="_blank" rel="noreferrer noopener"-->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                                                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                                                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                                                                </svg>
+                                                            </a>
+                                                        </div>
+                                                        <div class="imagen modal-imagen-tarjeta">
+                                                            <img th:src="@{'/certificadosAndTarjetas/'+${actividad.tarjeta}}" class="img-fluid rounded-3" alt="Imagen HTML"> <!--th:src="@{'data:image/jpeg;base64,'+${actividad.tarjeta}}"-->
+                                                            <div th:if="${band!=true}" class="nombre-tarjeta" th:text="${nombre}"></div>
+                                                            <div th:classappend="${band!=true ? 'qso-tarjeta-con-nombre' : 'qso-tarjeta-sin-nombre' }" th:text="${credenciales.licencia}"></div>
+                                                            <div class="fecha-tarjeta" th:text="${credenciales.date}"></div>
+                                                            <div class="banda-tarjeta" th:text="${credenciales.banda}"></div>
+                                                            <div class="mhz-tarjeta" th:text="${credenciales.freq}"></div>
+                                                            <div class="rst-tarjeta" th:text="${credenciales.rstSent}"></div>
+                                                            <div class="modo-tarjeta" th:text="${credenciales.modo}"></div>
+                                                            <div class="time-tarjeta" th:text="${credenciales.time}"></div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div th:if="${admin}" class="row margin-pagination">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8">
+                                <nav aria-label="Pagination">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item" th:classappend="${prev == 0 ? 'd-none' : ''}">
+                                            <a class="page-link" th:href="@{|/admin/credenciales/${actividad.id}/?page=${prev}|}">Anterior</a>
+                                        </li>
+                                        <li th:if="${page <= next+4}" class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active' : 'd-none'}">
+                                            <a class="page-link" th:href="@{|/admin/credenciales/${actividad.id}/?page=${page}|}" th:text="${page}"></a>                   
+                                        </li>
+
+                                        <ul>
+                                            <li>
+                                                <div class="dropdown">
+                                                    <button th:text="'De '+${last}" class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+                                                    <ul class="dropdown-menu paginacion">
+                                                      <li class="page-item" th:each="page : ${pages}">
+                                                          <a  th:classappend="${current == page ? 'active-paginacion' : ''}" class="dropdown-item links-paginacion text-dark" th:href="@{|/admin/credenciales/${actividad.id}/?page=${page}|}" th:text="${page}"></a>
+                                                      </li>                                     
+                                                    </ul>
+                                                </div>     
+                                            </li>
+                                        </ul>
+                                        <li class="page-item" th:classappend="${current == last ? 'd-none' : ''}">
+                                            <a class="page-link" th:href="@{|/admin/credenciales/${actividad.id}/?page=${next}|}">Siguiente</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="container text-end">
+                        <a class="btn btn-secondary" th:href="@{/credenciales/tarjetasYCertificados/}+${actividad.id}">Volver</a>
+                    </div>
+
+                </div>               
+            </div>
+            
+            <div class="loader" id="loaderSpinner"></div>
+            
+        </main>
+        
+        
+
+
+
+        <footer th:replace= "/fragments/footer :: div"></footer>
+
+    </body>
+</html>

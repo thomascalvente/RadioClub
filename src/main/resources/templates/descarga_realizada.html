@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="es" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace= "/fragments/head :: head" ></head>
+    <body class="m-7">
+        <header th:replace="/fragments/header :: header"></header>
+
+        <div class="container m-5 contenedor">
+            <div th:replace="/fragments/mensajes :: div"></div>
+        </div>   
+
+        <div class="container m-5 contenedor">
+            <div class="container text-end">
+                <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 container m-0 text-center" role="search" th:action="@{/credenciales/buscar/}+${actividad.id}" method="POST">
+                    <div class="input-group mb-3">
+                        
+                        <input type="hidden" class="form-control form-control-dark text-bg-dark" aria-label="Search" name="licencia" th:value="${licencia}">
+                    </div>    
+                    <button type="submit" class="btn btn-secondary">Volver</button>
+                </form>      
+            </div>
+        </div>
+
+        <footer th:replace= "/fragments/footer :: div"></footer>
+    </body>
+</html>
